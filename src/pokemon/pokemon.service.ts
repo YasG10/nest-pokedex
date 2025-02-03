@@ -7,10 +7,12 @@ import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Pokemon } from './entities/pokemon.entity';
 
+
 @Injectable()
 export class PokemonService {
   constructor(
-    @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>
+    @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>   
+
   ) {}
 
 
@@ -47,6 +49,10 @@ export class PokemonService {
       if (!pokemon) throw new BadRequestException(`Pokemon with id ${term} not found`);
       return pokemon;
     }   
+
+    const pokemon = await this.pokemonModel.findOne({name: term.toLowerCase().trim()});
+    if (!pokemon) throw new BadRequestException(`Pokemon with name ${term} not found`);
+    return pokemon;
    
     
   }
